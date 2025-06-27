@@ -40,6 +40,13 @@ async function connectToWhatsApp() {
       auth: state,
       logger: pino({ level: 'silent' }),
       browser: ['WhatsApp AI Bridge', 'Chrome', '1.0.0'],
+      connectTimeoutMs: 60000, // 60 seconds
+      defaultQueryTimeoutMs: 0,
+      keepAliveIntervalMs: 10000,
+      markOnlineOnConnect: false,
+      syncFullHistory: false,
+      printQRInTerminal: false,
+      getMessage: async () => undefined,
     });
 
     sock.ev.on('connection.update', async (update) => {
@@ -60,17 +67,19 @@ async function connectToWhatsApp() {
 
       if (connection === 'close') {
         currentQR = null; // Clear QR code
+        isConnected = false;
         const statusCode = lastDisconnect?.error?.output?.statusCode;
         const shouldReconnect = statusCode !== DisconnectReason.loggedOut;
 
         console.log('❌ Connection closed due to:', lastDisconnect?.error);
 
         if (shouldReconnect) {
-          console.log('🔄 Reconnecting...');
-          connectToWhatsApp();
+          console.log('🔄 Reconnecting in 5 seconds...');
+          setTimeout(() => {
+            connectToWhatsApp();
+          }, 5000); // Wait 5 seconds before reconnecting
         } else {
           console.log('⚠️  Logged out. Delete session and restart.');
-          isConnected = false;
         }
       } else if (connection === 'open') {
         console.log('✅ WhatsApp connected successfully!');
@@ -92,7 +101,8 @@ async function connectToWhatsApp() {
 
   } catch (error) {
     logger.error('Failed to connect to WhatsApp:', error);
-    setTimeout(connectToWhatsApp, 5000);
+    console.log('🔄 Retrying connection in 10 seconds...');
+    setTimeout(connectToWhatsApp, 10000); // Wait 10 seconds on general errors
   }
 }
 
