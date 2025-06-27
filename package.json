@@ -1,0 +1,35 @@
+{
+  "name": "whatsapp-ai-bridge",
+  "version": "1.0.0",
+  "description": "Baileys.js bridge for WhatsApp AI integration with n8n",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "whatsapp",
+    "baileys",
+    "ai",
+    "n8n",
+    "chatbot"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "@hapi/boom": "^10.0.1",
+    "@whiskeysockets/baileys": "^6.7.5",
+    "axios": "^1.6.0",
+    "express": "^4.18.2",
+    "pino": "^8.16.0",
+    "qrcode": "^1.5.4",
+    "qrcode-terminal": "^0.12.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
